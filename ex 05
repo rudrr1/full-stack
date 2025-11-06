@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Product Filter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        select {
+            padding: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .product {
+            border: 1px solid #ddd;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            background-color: #fafafa;
+        }
+        .product h3 {
+            margin: 0;
+        }
+        .product p {
+            margin: 4px 0 0 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Dynamic Product Filter</h1>
+<div class="container">
+    <label for="categorySelect">Filter by Category:</label>
+    <select id="categorySelect" onchange="filterProducts()">
+        <option value="All">All</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Books">Books</option>
+    </select>
+
+    <div id="productContainer">
+        <!-- Products will appear here -->
+    </div>
+</div>
+
+<script>
+    const products = [
+        { name: "Laptop", category: "Electronics", price: "$999" },
+        { name: "Smartphone", category: "Electronics", price: "$599" },
+        { name: "T-Shirt", category: "Clothing", price: "$19" },
+        { name: "Jeans", category: "Clothing", price: "$49" },
+        { name: "JavaScript Book", category: "Books", price: "$29" },
+        { name: "Cooking Book", category: "Books", price: "$25" },
+    ];
+
+    function displayProducts(productList) {
+        const container = document.getElementById('productContainer');
+        container.innerHTML = '';
+
+        if(productList.length === 0) {
+            container.innerHTML = '<p>No products found.</p>';
+            return;
+        }
+
+        productList.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+            productDiv.innerHTML = `
+                <h3>${product.name}</h3>
+                <p>Category: ${product.category}</p>
+                <p>Price: ${product.price}</p>
+            `;
+            container.appendChild(productDiv);
+        });
+    }
+
+    function filterProducts() {
+        const selectedCategory = document.getElementById('categorySelect').value;
+        if (selectedCategory === "All") {
+            displayProducts(products);
+        } else {
+            const filtered = products.filter(p => p.category === selectedCategory);
+            displayProducts(filtered);
+        }
+    }
+
+    // Display all products initially
+    displayProducts(products);
+</script>
+
+</body>
+</html>
