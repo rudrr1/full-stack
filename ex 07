@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 70%;
+            margin-right: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .remove-btn {
+            background-color: #f44336;
+        }
+        .remove-btn:hover {
+            background-color: #da190b;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Library Management System</h1>
+    <div class="container">
+        <div>
+            <input type="text" id="bookName" placeholder="Enter book name">
+            <button onclick="addBook()">Add Book</button>
+        </div>
+        <div style="margin-top: 10px;">
+            <input type="text" id="searchBook" placeholder="Search books..." onkeyup="searchBook()">
+        </div>
+
+        <table id="bookTable">
+            <thead>
+                <tr>
+                    <th>Book Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Books will appear here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let books = [];
+
+        function addBook() {
+            const bookInput = document.getElementById('bookName');
+            const bookName = bookInput.value.trim();
+            if (bookName === '') {
+                alert('Please enter a book name.');
+                return;
+            }
+            books.push(bookName);
+            bookInput.value = '';
+            renderTable();
+        }
+
+        function removeBook(index) {
+            books.splice(index, 1);
+            renderTable();
+        }
+
+        function searchBook() {
+            const query = document.getElementById('searchBook').value.toLowerCase();
+            renderTable(query);
+        }
+
+        function renderTable(searchQuery = '') {
+            const tableBody = document.querySelector('#bookTable tbody');
+            tableBody.innerHTML = '';
+
+            books.forEach((book, index) => {
+                if (book.toLowerCase().includes(searchQuery)) {
+                    const row = document.createElement('tr');
+
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = book;
+                    row.appendChild(nameCell);
+
+                    const actionCell = document.createElement('td');
+                    const removeBtn = document.createElement('button');
+                    removeBtn.textContent = 'Remove';
+                    removeBtn.className = 'remove-btn';
+                    removeBtn.onclick = () => removeBook(index);
+                    actionCell.appendChild(removeBtn);
+                    row.appendChild(actionCell);
+
+                    tableBody.appendChild(row);
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
