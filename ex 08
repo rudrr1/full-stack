@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person Class Hierarchy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        .remove-btn {
+            background-color: #f44336;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .remove-btn:hover {
+            background-color: #da190b;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Person Class Hierarchy</h1>
+<div class="container">
+    <div>
+        <label for="personType">Type:</label>
+        <select id="personType">
+            <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option>
+        </select>
+
+        <label for="personName">Name:</label>
+        <input type="text" id="personName" placeholder="Enter name">
+
+        <label for="personAge">Age:</label>
+        <input type="number" id="personAge" placeholder="Enter age">
+
+        <div id="extraFieldContainer">
+            <label for="extraField">Class (for Student) / Subject (for Teacher):</label>
+            <input type="text" id="extraField" placeholder="Enter value">
+        </div>
+
+        <button onclick="addPerson()">Add Person</button>
+    </div>
+
+    <table id="personTable">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Class/Subject</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Persons will appear here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Base Person class
+    class Person {
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        getDetails() {
+            return `${this.name}, Age: ${this.age}`;
+        }
+    }
+
+    // Student subclass
+    class Student extends Person {
+        constructor(name, age, className) {
+            super(name, age);
+            this.className = className;
+        }
+
+        getDetails() {
+            return `${super.getDetails()}, Class: ${this.className}`;
+        }
+    }
+
+    // Teacher subclass
+    class Teacher extends Person {
+        constructor(name, age, subject) {
+            super(name, age);
+            this.subject = subject;
+        }
+
+        getDetails() {
+            return `${super.getDetails()}, Subject: ${this.subject}`;
+        }
+    }
+
+    let persons = [];
+
+    function addPerson() {
+        const type = document.getElementById('personType').value;
+        const name = document.getElementById('personName').value.trim();
+        const age = document.getElementById('personAge').value.trim();
+        const extra = document.getElementById('extraField').value.trim();
+
+        if (!name || !age || !extra) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        let person;
+        if (type === 'Student') {
+            person = new Student(name, age, extra);
+        } else {
+            person = new Teacher(name, age, extra);
+        }
+
+        persons.push(person);
+        renderTable();
+        clearInputs();
+    }
+
+    function removePerson(index) {
+        persons.splice(index, 1);
+        renderTable();
+    }
+
+    function renderTable() {
+        const tableBody = document.querySelector('#personTable tbody');
+        tableBody.innerHTML = '';
+
+        persons.forEach((p, index) => {
+            const row = document.createElement('tr');
+
+            const typeCell = document.createElement('td');
+            typeCell.textContent = p instanceof Student ? 'Student' : 'Teacher';
+            row.appendChild(typeCell);
+
+            const nameCell = document.createElement('td');
+            nameCell.textContent = p.name;
+            row.appendChild(nameCell);
+
+            const ageCell = document.createElement('td');
+            ageCell.textContent = p.age;
+            row.appendChild(ageCell);
+
+            const extraCell = document.createElement('td');
+            extraCell.textContent = p instanceof Student ? p.className : p.subject;
+            row.appendChild(extraCell);
+
+            const actionCell = document.createElement('td');
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = 'Remove';
+            removeBtn.className = 'remove-btn';
+            removeBtn.onclick = () => removePerson(index);
+            actionCell.appendChild(removeBtn);
+            row.appendChild(actionCell);
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    function clearInputs() {
+        document.getElementById('personName').value = '';
+        document.getElementById('personAge').value = '';
+        document.getElementById('extraField').value = '';
+    }
+</script>
+
+</body>
+</html>
