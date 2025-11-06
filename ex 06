@@ -1,0 +1,71 @@
+import React from 'react';
+
+// ProductCard Component
+function ProductCard({ name, price, category }) {
+  const cardStyle = {
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    padding: "15px",
+    width: "200px",
+    backgroundColor: "#fafafa",
+    boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
+  };
+
+  const titleStyle = {
+    margin: "0 0 10px 0",
+    fontSize: "18px"
+  };
+
+  const infoStyle = {
+    margin: "5px 0",
+    color: "#555"
+  };
+
+  return (
+    <div style={cardStyle}>
+      <h3 style={titleStyle}>{name}</h3>
+      <p style={infoStyle}>Category: {category}</p>
+      <p style={infoStyle}>Price: {price}</p>
+    </div>
+  );
+}
+
+// App Component
+function App() {
+  const products = [
+    { id: 1, name: "Laptop", price: "$999", category: "Electronics" },
+    { id: 2, name: "T-Shirt", price: "$19", category: "Clothing" },
+    { id: 3, name: "JavaScript Book", price: "$29", category: "Books" },
+    { id: 4, name: "Headphones", price: "$49", category: "Electronics" },
+  ];
+
+  const appStyle = {
+    maxWidth: "800px",
+    margin: "40px auto",
+    fontFamily: "Arial, sans-serif"
+  };
+
+  const productsContainerStyle = {
+    display: "flex",
+    gap: "20px",
+    flexWrap: "wrap"
+  };
+
+  return (
+    <div style={appStyle}>
+      <h1 style={{ textAlign: "center" }}>Product List</h1>
+      <div style={productsContainerStyle}>
+        {products.map(product => (
+          <ProductCard
+            key={product.id}
+            name={product.name}
+            price={product.price}
+            category={product.category}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default App;
